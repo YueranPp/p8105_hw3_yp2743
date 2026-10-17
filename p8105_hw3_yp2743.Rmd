@@ -18,34 +18,17 @@ library(tidyverse)
 library(p8105.datasets)
 data("ny_noaa")
 str(ny_noaa)
-##briefly check
+
+#check missing var % for precipitation, snow, snow depth, maximum temperature, minimum temperature. Running each of the missing % will result in seven chunks, as we just learned 'everything' code in data wrangling 2, I consulted AI how to write this `mean(is.na(x))` part more efficiently by using `across` + '~'. Double check using '?' function
+
 ny_noaa |>
-  select(id:tmin) |>
-  is.na()
-#check missing var % for percipitation, snow, snow depth, maximum temperature, minimum temperature
-ny_noaa |>
-  pull(tmax) |>
-  is.na() |>
-  mean()
-ny_noaa |>
-  pull(tmin) |>
-  is.na() |>
-  mean()
-ny_noaa |>
-  pull(prcp) |>
-  is.na() |>
-  mean()
-ny_noaa |>
-  pull(snow) |>
-  is.na() |>
-  mean()
-ny_noaa |>
-  pull(snwd) |>
-  is.na() |>
-  mean()
+  summarise(
+    across(everything(), ~ mean(is.na(.x)) * 100)
+  )
 ```
-A short description of the dataset (noting the size and structure of the data, describing some key variables, and indicating the extent to which missing data is an issue) 
-This dataset contains 2,595,176 observations and 7 key variables: id, date, prcp, snow, snwd, tmax, and tmin. 
+
+This dataset contains 2,595,176 observations and 7 key variables: id, date, precipitation (tenth of mm), snowfall (mm), snow depth (mm), maximum temperature (tenth of Celsius degree), and minimum temperature (tenth of Celsius degree). No id or date is missing, while 43.71% of the maximum temperature data is missing, very similarly (43.71%) missing percentage for minimum temperature, which seems to be an issue. Precipitation data has 5.62% of missing data, snow has 14.69% of missing data, and snow depth has 22.80% of missing data.
+
 
 ```{r q1_clean_separate_var}
 noaa_df = ny_noaa |>
@@ -53,11 +36,17 @@ janitor::clean_names() |>
 separate(date, into = c("year", "month","date"), sep = "-") |>
   mutate(year = as.numeric(year), 
          month = as.numeric(month), 
-         date =  as.numeric(date))
+         date =  as.numeric(date),
+         tmax_c = as.numeric(tmax)/10,
+         tmin_c = as.numeric(tmin)/10,
+         prcp_mm = prcp /10
+  )
+noaa_df |> 
+    count(snow, sort = TRUE)
 
 ```
 
-Do some data cleaning. Create separate variables for year, month, and day. Ensure observations for temperature, precipitation, and snowfall are given in reasonable units. For snowfall, what are the most commonly observed values? Why?
+Convert observations for temperature, precipitation, and snowfall to reasonable units: Tmax and Tmin from 10th Celsius to Celsius, precipitation from tenth mm to mm. For snowfall, the most commonly observed value is 0mm. This is expected because the dataset includes observations throughout the year. Plus, snowfall is seasonal, and not many days will have snowfall even during colder months.
 
 Make a two-panel plot showing the average max temperature in January and in July in each station across years. Is there any observable / interpretable structure? Any outliers?
 Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); and (ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
