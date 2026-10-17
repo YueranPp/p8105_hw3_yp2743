@@ -1,0 +1,35 @@
+---
+title: "p8105_hw3_yp2743"
+author: "Yueran Pan"
+date: "2026-10-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+
+```
+
+##Question 1: exploration of NY NOAA dataset
+```{r loading, echo=FALSE}
+library(p8105.datasets)
+data("ny_noaa")
+```
+A short description of the dataset (noting the size and structure of the data, describing some key variables, and indicating the extent to which missing data is an issue) 
+
+Do some data cleaning. Create separate variables for year, month, and day. Ensure observations for temperature, precipitation, and snowfall are given in reasonable units. For snowfall, what are the most commonly observed values? Why?
+Make a two-panel plot showing the average max temperature in January and in July in each station across years. Is there any observable / interpretable structure? Any outliers?
+Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); and (ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
+
+```{r cars}
+summary(cars)
+```
+
+
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
