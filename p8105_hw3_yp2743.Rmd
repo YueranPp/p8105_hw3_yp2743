@@ -14,15 +14,46 @@ library(tidyverse)
 
 ##Problem 1: exploration of NY NOAA dataset
 
-```{r q1_loading, include=FALSE}
+```{r q1_loading, echo=FALSE}
 library(p8105.datasets)
 data("ny_noaa")
 str(ny_noaa)
+##briefly check
+ny_noaa |>
+  select(id:tmin) |>
+  is.na()
+#check missing var % for percipitation, snow, snow depth, maximum temperature, minimum temperature
+ny_noaa |>
+  pull(tmax) |>
+  is.na() |>
+  mean()
+ny_noaa |>
+  pull(tmin) |>
+  is.na() |>
+  mean()
+ny_noaa |>
+  pull(prcp) |>
+  is.na() |>
+  mean()
+ny_noaa |>
+  pull(snow) |>
+  is.na() |>
+  mean()
+ny_noaa |>
+  pull(snwd) |>
+  is.na() |>
+  mean()
 ```
 A short description of the dataset (noting the size and structure of the data, describing some key variables, and indicating the extent to which missing data is an issue) 
-This dataset contains 2,595 observations, with 176 rows and 7 key variables(columns). Variables are: id, data, prcp, snow, snwd, tmax, and tmin. IDk how. to tell issue
+This dataset contains 2,595,176 observations and 7 key variables: id, date, prcp, snow, snwd, tmax, and tmin. 
 
 ```{r q1_clean_separate_var}
+noaa_df = ny_noaa |>
+janitor::clean_names() |>
+separate(date, into = c("year", "month","date"), sep = "-") |>
+  mutate(year = as.numeric(year), 
+         month = as.numeric(month), 
+         date =  as.numeric(date))
 
 ```
 
