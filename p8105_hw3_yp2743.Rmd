@@ -19,7 +19,7 @@ library(p8105.datasets)
 data("ny_noaa")
 str(ny_noaa)
 
-#check missing var % for precipitation, snow, snow depth, maximum temperature, minimum temperature. Running each of the missing % will result in seven chunks, as we just learned 'everything' code in data wrangling 2, I consulted AI how to write this `mean(is.na(x))` part more efficiently by using `across` + '~'. Double check using '?' function
+#check missing var % for precipitation, snow, snow depth, maximum temperature, minimum temperature. Running each of the missing % will result in seven chunks, as we just learned 'everything' code in data wrangling 2, I consulted AI how to write this `mean(is.na(x))` part more efficiently by using `across` + '~'. Double check using '?' function instead of running seven chunks
 
 ny_noaa |>
   summarise(
@@ -30,7 +30,7 @@ ny_noaa |>
 This dataset contains 2,595,176 observations and 7 key variables: id, date, precipitation (tenth of mm), snowfall (mm), snow depth (mm), maximum temperature (tenth of Celsius degree), and minimum temperature (tenth of Celsius degree). No id or date is missing, while 43.71% of the maximum temperature data is missing, very similarly (43.71%) missing percentage for minimum temperature, which seems to be an issue. Precipitation data has 5.62% of missing data, snow has 14.69% of missing data, and snow depth has 22.80% of missing data.
 
 
-```{r q1_clean_separate_var}
+```{r q1_clean_separate_var, echo = FALSE}
 noaa_df = ny_noaa |>
 janitor::clean_names() |>
 separate(date, into = c("year", "month","date"), sep = "-") |>
@@ -49,6 +49,17 @@ noaa_df |>
 Convert observations for temperature, precipitation, and snowfall to reasonable units: Tmax and Tmin from 10th Celsius to Celsius, precipitation from tenth mm to mm. For snowfall, the most commonly observed value is 0mm. This is expected because the dataset includes observations throughout the year. Plus, snowfall is seasonal, and not many days will have snowfall even during colder months. Additionally, it seems like those mm values are converted from inches, because '25mm, 13mm, 51mm, 76mm converted to inches are 1 inch, 0.5 inch, 2 inch, and 3 inch, this is consistent to the national weather service measurement recommendation.
 
 Make a two-panel plot showing the average max temperature in January and in July in each station across years. Is there any observable / interpretable structure? Any outliers?
+```{r q1_tmax_in_Jan_n_July, echo = FALSE}
+
+tmax_df = noaa_df |>
+  filter(month %in% c(1, 7)) |>
+  group_by(id, month, tmax) |>
+  summarise(
+    tmax_avg_month = mean(tmax, na.rm = TRUE)
+  )
+```
+
+
 Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); and (ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year. 
 
 
