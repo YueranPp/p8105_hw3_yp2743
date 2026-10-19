@@ -357,6 +357,16 @@ display: none;
 </div>
 
 
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.2.1     ✔ readr     2.2.0
+## ✔ forcats   1.0.1     ✔ stringr   1.6.0
+## ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+## ✔ purrr     1.2.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <p>##Problem 1: exploration of NY NOAA dataset</p>
 <pre><code>## tibble [2,595,176 × 7] (S3: tbl_df/tbl/data.frame)
 ##  $ id  : chr [1:2595176] &quot;US1NYAB0001&quot; &quot;US1NYAB0001&quot; &quot;US1NYAB0001&quot; &quot;US1NYAB0001&quot; ...
@@ -380,14 +390,17 @@ display: none;
 ##      id  date  prcp  snow  snwd  tmax  tmin
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1     0     0  5.62  14.7  22.8  43.7  43.7</code></pre>
-<p>This dataset contains 2,595,176 observations and 7 key variables: id,
-date, precipitation (tenth of mm), snowfall (mm), snow depth (mm),
-maximum temperature (tenth of Celsius degree), and minimum temperature
-(tenth of Celsius degree). No id or date is missing, while 43.71% of the
-maximum temperature data is missing, very similarly (43.71%) missing
-percentage for minimum temperature, which seems to be an issue.
-Precipitation data has 5.62% of missing data, snow has 14.69% of missing
-data, and snow depth has 22.80% of missing data.</p>
+<p>This dataset contains 2,595,176 observations and 7 key variables:
+<code>id</code>, <code>date</code>, precipitation (tenth of mm),
+snowfall (mm), snow depth (mm), maximum temperature (tenth of Celsius
+degree), and minimum temperature (tenth of Celsius degree). Each row
+represents a daily weather observation at a particular station,
+identifeid by <code>id</code>. No <code>id</code> or <code>date</code>
+is missing. However, approximately 43.71% of observations are missing
+maximum or minimum temperature values, which might limit the data
+available for temperature analyses below. Precipitation data has 5.62%
+of missing data, snow has 14.69% of missing data, and snow depth has
+22.80% of missing data.</p>
 <pre><code>## # A tibble: 282 × 2
 ##     snow       n
 ##    &lt;int&gt;   &lt;int&gt;

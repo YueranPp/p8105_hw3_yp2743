@@ -5,14 +5,14 @@ date: "2026-10-16"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-
-
 ```
 
-##Problem 1: exploration of NY NOAA dataset
+
+## Problem 1: exploration of NY NOAA dataset
+
 
 ```{r q1_loading, echo=FALSE}
 library(p8105.datasets)
@@ -27,7 +27,8 @@ ny_noaa |>
   )
 ```
 
-This dataset contains 2,595,176 observations and 7 key variables: id, date, precipitation (tenth of mm), snowfall (mm), snow depth (mm), maximum temperature (tenth of Celsius degree), and minimum temperature (tenth of Celsius degree). No id or date is missing, while 43.71% of the maximum temperature data is missing, very similarly (43.71%) missing percentage for minimum temperature, which seems to be an issue. Precipitation data has 5.62% of missing data, snow has 14.69% of missing data, and snow depth has 22.80% of missing data.
+
+This dataset contains 2,595,176 observations and 7 key variables: `id`, `date`, precipitation (tenth of mm), snowfall (mm), snow depth (mm), maximum temperature (tenth of Celsius degree), and minimum temperature (tenth of Celsius degree). Each row represents a daily weather observation at a particular station, identifeid by `id`. No `id` or `date` is missing. However, approximately 43.71% of observations are missing maximum or minimum temperature values, which might limit the data available for temperature analyses below. Precipitation data has 5.62% of missing data, snow has 14.69% of missing data, and snow depth has 22.80% of missing data.
 
 
 ```{r q1_clean_separate_var, echo = FALSE}
@@ -46,9 +47,14 @@ noaa_df |>
 
 ```
 
-Convert observations for temperature, precipitation, and snowfall to reasonable units: Tmax and Tmin from 10th Celsius to Celsius, precipitation from tenth mm to mm. For snowfall, the most commonly observed value is 0mm. This is expected because the dataset includes observations throughout the year. Plus, snowfall is seasonal, and not many days will have snowfall even during colder months. Additionally, it seems like those mm values are converted from inches, because '25mm, 13mm, 51mm, 76mm converted to inches are 1 inch, 0.5 inch, 2 inch, and 3 inch, this is consistent to the national weather service measurement recommendation.
 
-#### Make a two-panel plot showing the average max temperature in January and in July in each station across years. 
+Convert observations for temperature, precipitation, and snowfall to reasonable units: Tmax and Tmin from 10th Celsius to Celsius, precipitation from tenth mm to mm. Snowfall is already recorded in milimeters and does not require conversion. 
+
+For snowfall, the most commonly observed value is 0mm. This is expected because the dataset includes observations throughout the year. 
+
+
+#### Q1.2Make a two-panel plot showing the average max temperature in January and in July in each station across years. 
+
 ```{r q1_tmax_in_Jan_n_July, echo = FALSE}
 
 tmax_df = noaa_df |>
@@ -73,10 +79,14 @@ tmax_df |>
   theme_minimal()
 
 ```
-#### Is there any observable / interpretable structure? Any outliers?
-Based on the plot, every year, July's average maximum temperature is much higher (around 20°C higher, estimated roughly by eyes) than January's average maximum temperature. Stations show similar year-to-year fluctuations, but January's variability is greater than July's. There's a notable low temperature of 14°C in July average around year 1987/1988. There's also a low temperature an around -13.5°C in year 1982 in January's plot.
 
-#### Q1 Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); 
+#### Q1.2.2: Is there any observable / interpretable structure? Any outliers?
+
+
+Based on the plot, every year, July's average maximum temperature is much higher (around 20°C higher, estimated roughly by eyes) than January's average maximum temperature. Stations show similar year-to-year fluctuations, but January's variability is greater than July's. Around year 1987/1988, one station's average maximum temperature in July is approximately 14°C, which might be a potential outlier. There's also a low temperature an around -13.5°C in year 1982 in January's plot.
+
+
+#### Q1.3 Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); 
 
 ```{r i_tmax_vs_tmin }
 temp_plot = noaa_df |>
@@ -90,7 +100,11 @@ temp_plot = noaa_df |>
 
 temp_plot
 ```
-### Q1(ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year. 
+
+
+### Q1.3(ii, continue) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year. 
+
+
 ```{r ii_snowfall}
 
 #Making plot
@@ -113,10 +127,36 @@ temp_plot + snow_plot
 ```
 
 
-##Problem 2
+## Problem 2
 Accelerometers have become an appealing alternative to self-report techniques for studying physical activity in observational studies and clinical trials, largely because of their relative objectivity. During observation periods, the devices can measure MIMS in a short period; one-minute intervals are common. Because accelerometers can be worn comfortably and unobtrusively, they produce around-the-clock observations.
 
 This problem uses accelerometer data collected on 250 participants in the NHANES study. The participants’ demographic data can be downloaded here, and their accelerometer data can be downloaded here. Variables *MIMS are the MIMS values for each minute of a 24-hour day starting at midnight.
+
+
+
+```{r loadin echo = false}
+
+covar_df = read_csv(
+  "./nhanes_covar.csv",
+  skip = 4
+) |>
+  janitor::clean_names()
+
+accel_df = read_csv(
+  "./nhanes_accel.csv"
+) |>
+  janitor::clean_names()
+
+head(covar_df)
+
+accel_df |>
+  select(seqn, min1:min5) |>
+  head()
+```
+
+```{r tidy&merge}
+
+```
 
 Load, tidy, merge, and otherwise organize the data sets. Your final dataset should include all originally observed variables; exclude participants less than 21 years of age, and those with missing demographic data; and encode data with reasonable variable classes (i.e. not numeric, and using factors with the ordering of tables and plots in mind).
 
