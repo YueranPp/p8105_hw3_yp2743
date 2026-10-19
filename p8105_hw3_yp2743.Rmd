@@ -46,10 +46,11 @@ noaa_df |>
 
 ```
 
-Convert observations for temperature, precipitation, and snowfall to reasonable units: Tmax and Tmin from 10th Celsius to Celsius, precipitation from tenth mm to mm. For snowfall, the most commonly observed value is 0mm. This is expected because the dataset includes observations throughout the year. Plus, snowfall is seasonal, and not many days will have snowfall even during colder months.
+Convert observations for temperature, precipitation, and snowfall to reasonable units: Tmax and Tmin from 10th Celsius to Celsius, precipitation from tenth mm to mm. For snowfall, the most commonly observed value is 0mm. This is expected because the dataset includes observations throughout the year. Plus, snowfall is seasonal, and not many days will have snowfall even during colder months. Additionally, it seems like those mm values are converted from inches, because '25mm, 13mm, 51mm, 76mm converted to inches are 1 inch, 0.5 inch, 2 inch, and 3 inch, this is consistent to the national weather service measurement recommendation.
 
 Make a two-panel plot showing the average max temperature in January and in July in each station across years. Is there any observable / interpretable structure? Any outliers?
-Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); and (ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
+Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); and (ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year. 
+
 
 
 ##Problem 2
