@@ -155,26 +155,76 @@ accel_df |>
 ```
 
 ```{r tidy&merge}
+#tidy up
 covar_df = covar_df |>
   filter(age >=21) |>
   drop_na(sex, age, bmi, education) |>
-  mutate(
-    sex = factor(
-      sex,
-      levels = c(1, 2),
-      labels = c("Male", "Female")
-    ),
-    education = factor(
-      education,
-      levels = c(1, 2, 3),
-      labels = c("Less than high school", "High school equivalent", "More than high school")
-    )
+mutate(
+  sex = case_match(
+    sex,
+    1 ~ "Male",
+    2 ~ "Female"
+  ),
+  sex = as.factor(sex),
+  sex = fct_relevel(sex, "Male", "Female"),
+
+  education = case_match(
+    education,
+    1 ~ "Less than high school",
+    2 ~ "High school equivalent",
+    3 ~ "More than high school"
+  ),
+  education = as.factor(education),
+  education = fct_relevel(
+    education,
+    "Less than high school",
+    "High school equivalent",
+    "More than high school"
   )
+)
+
+accel_long_df = accel_df |>
+  pivot_longer(
+    cols = min1:min1440,
+    names_to = "minute",
+    values_to = "mims",
+    names_prefix = "min"
+  ) |>
+  mutate(minute = as.numeric(minute))
+
+#merge
+q2_df = covar_df |>
+  left_join(accel_long_df, by = "seqn")
 ```
 
-Load, tidy, merge, and otherwise organize the data sets. Your final dataset should include all originally observed variables; exclude participants less than 21 years of age, and those with missing demographic data; and encode data with reasonable variable classes (i.e. not numeric, and using factors with the ordering of tables and plots in mind).
+Checked the q2_df merged final dataset should include all originally observed variables but exclude participants less than 21 years of age, and those with missing demographic data; and encode data with reasonable variable classes (i.e. not numeric, and using factors with the ordering of tables and plots in mind).
 
-Produce a reader-friendly table for the number of men and women in each education category, and create a visualization of the age distributions for men and women in each education category. Comment on these items.
+
+### Q2. 2 Produce a reader-friendly table for the number of men and women in each education category, and create a visualization of the age distributions for men and women in each education category. Comment on these items.
+
+
+```{r}
+q2_df |>
+  count(education, sex) |>
+  pivot_wider(
+    names_from = sex,
+    values_from = n
+  ) |>
+  knitr::kable(
+    col.names = c("Education", "Men", "Women")
+  )
+
+q2_df |>
+  ggplot(aes(x = age, color = education)) +
+  geom_density() +
+  facet_grid(. ~ sex) +
+  labs(
+    x = "Age (years)",
+    y = "Density",
+    color = "Education"
+  )
+
+```
 
 Traditional analyses of accelerometer data focus on the total activity over the day. Using your tidied dataset, aggregate across minutes to create a total activity variable for each participant. Plot these total activities (y-axis) against age (x-axis); your plot should compare men to women and have separate panels for each education level. Include a trend line or a smooth to illustrate differences. Comment on your plot.
 
