@@ -434,5 +434,5 @@ citibike_df |>
   )
 ```
 
-In 2024,  all distributions are right-skewed, with relatively few long rides. Comparing to casual rider, members’ ride durations are more concentrated at shorter durations. Among casual riders, electric-bike rides have a more prominent peak at short durations (0min-25mins), while classic-bike rides have a broader distribution. Among members, the distributions for the two bike types are similar, although classic-bike rides have a slightly higher peak in July. Compared with January, July generally shows broader distributions with lower peaks.
+In 2024,  all distributions are right-skewed, with relatively few long rides. Comparing to casual rider, members’ ride durations are more concentrated at shorter durations. Among casual riders, electric-bike rides have a more prominent peak at short durations (0min-25mins), while classic-bike rides have a broader distribution. Among members, the distributions for the two bike types are similar, although the classic-bike rides peak in July is slightly higher.  July generally shows broader distributions with lower peaks. Perhaps during summertime, people feel more comfortable to engage in outdoor activity (compairng to winter it might be cold to ride outside).
 
