@@ -96,18 +96,15 @@ temp_plot
 #Making plot
 snow_plot = noaa_df |>
   filter(snow > 0, snow < 100) |>
-  ggplot(aes(x = factor(year), y = snow)) +
-  geom_boxplot() + 
+  ggplot(aes(x = snow, color = factor(year))) +
+  geom_density() +
   labs(
-    title = "Average snowfall(mm) by year",
-    x = "Year",
-    y = "Snow depth (mm)w"
-  ) 
+    x = "Snowfall (mm)",
+    y = "Density",
+    color = "Year"
+  )
 
-#merge templot and snowplot
-library(patchwork)
-
-temp_plot + snow_plot
+snow_plot
 ```
 
 
