@@ -105,6 +105,11 @@ snow_plot = noaa_df |>
   )
 
 snow_plot
+
+#merge templot and snowplot
+library(patchwork)
+
+temp_plot + snow_plot
 ```
 
 
