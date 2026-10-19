@@ -199,7 +199,7 @@ q2_df = covar_df |>
 Checked the q2_df merged final dataset should include all originally observed variables but exclude participants less than 21 years of age, and those with missing demographic data; and encode data with reasonable variable classes (i.e. not numeric, and using factors with the ordering of tables and plots in mind).
 
 
-### Q2. 2 Produce a reader-friendly table for the number of men and women in each education category, and create a visualization of the age distributions for men and women in each education category. Comment on these items.
+### Q2. 2 Produce a reader-friendly table for the number of men and women in each education category, and create a visualization of the age distributions for men and women in each education category. 
 
 
 ```{r}
@@ -224,6 +224,7 @@ covar_df |>
   )
 
 ```
+After organizing the criteria and clearing out missing variables, there are 27 men and 28 men with less than high school degree, 35 men and 23 women with high school or equivalent degree, 56 men and 59 women with educational degree more than high school. Combining age, we see that under women who own 'more than high school' educational degree are most likely to be young women, while women more than 40 has the other two degree. However, men around age 20 has the least number in less than high school comparing to yr old 80 and 60. It seems like as time progress, more and more young people receive higher educational degree.
 
 Traditional analyses of accelerometer data focus on the total activity over the day. Using your tidied dataset, aggregate across minutes to create a total activity variable for each participant. Plot these total activities (y-axis) against age (x-axis); your plot should compare men to women and have separate panels for each education level. Include a trend line or a smooth to illustrate differences. Comment on your plot.
 
