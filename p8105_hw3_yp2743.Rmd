@@ -249,8 +249,33 @@ total_activity_df |>
   )
 ```
 
-Among those with less than high school degree, since age of 40, males have higher total daily activity comparing to females. Among those with high school or more than high school degree, females tend to have higher daily activity comparing to males. Comparing across these three categories, people with less than high school degree seem to have highest total daily activity around age 21-40. All educational groups' people, regardless of their gender, have less total daily activity as age increases.
+Among those with less than high school degree, since age of 40, males have higher total daily activity comparing to females. Among those with high school or more than high school degree, females tend to have higher daily activity comparing to males. Comparing across these three categories, people with less than high school degree seem to have highest total daily activity around age 21-40. All educational groups' people, regardless of their gender, total daily activity tends to be lower at older ages. 
 
+
+### Q2.3 three-panel plot that shows the 24-hour activity time courses for each education level and use color to indicate sex
+
+
+```{r}
+daily_activity_df = q2_df |>
+  group_by(sex, education, minute) |>
+  summarise(
+    mean_mims = mean(mims)
+  ) |>
+  ungroup()|>
+  mutate (hour = (minute-1) /60)
+  
+daily_activity_df |>
+  ggplot(aes(x = hour, y = mean_mims, color = sex)) +
+  geom_point(alpha = 0.25) +
+  geom_smooth(se = FALSE) +
+  facet_grid(. ~ education) +
+  labs(
+    x = "Time of the day in hours",
+    y = "Mean MIMS activity per minute",
+    color = "Sex"
+  )
+```
+Comparing across groups, no significant time-daily activity has been found. Three groups all seem to have lowest MIMS activity around 0-7am, then peak 7-10am, stays flat or decreases until 8pm, then decreases 8pm to 12am. However, for both sex, it seems like people with less than high school educational attainment tends to have slightly higher MIMS activity per minute, comparing to the other two groups. 
 
 
 Problem 3
