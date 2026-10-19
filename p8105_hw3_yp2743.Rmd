@@ -418,7 +418,7 @@ median_duration_df |>
 
 Median ride duration is consistently highest in July 2020 across all days of the week. For both January and July, median ride durations are higher in 2020 than in 2024. Weekend rides generally have longer median durations, especially in July 2020. In January 2024, median duration peaks on Saturday and then decreases on Sunday.
 
-
+ 
 #### Q3.5 For data in 2024, make a figure that shows the impact of month, membership status, and bike type on the distribution of ride duration. Comment on your results.
 
 ```{r}
