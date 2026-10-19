@@ -210,7 +210,7 @@ covar_df |>
     values_from = n
   ) |>
   knitr::kable(
-    col.names = c("Education", "Men", "Women")
+    col.names = c("Education", "Men(n)", "Women(n)")
   )
 
 covar_df |>
@@ -224,7 +224,11 @@ covar_df |>
   )
 
 ```
-After organizing the criteria and clearing out missing variables, there are 27 men and 28 men with less than high school degree, 35 men and 23 women with high school or equivalent degree, 56 men and 59 women with educational degree more than high school. Combining age, we see that under women who own 'more than high school' educational degree are most likely to be young women, while women more than 40 has the other two degree. However, men around age 20 has the least number in less than high school comparing to yr old 80 and 60. It seems like as time progress, more and more young people receive higher educational degree.
+
+228 participants remained after restricting the sample to participants aged 21+ years and excluding those with missing demographic data. There were 27 men and 28 women with less than a high school education, 35 men and 23 women with a high school equivalent education, and 56 men and 59 women with more than a high school education.
+
+Among women, the age distribution for those with more than a high school education peaks around age 25, while the other two education groups have higher densities at older ages, forming two opposite age trends. Among men, the less-than-high-school group peaks around age 70, and has the lowest proportion among age ~ 21-30.  In this sample, younger age seems to have higher educational level, particularly among women.
+
 
 Traditional analyses of accelerometer data focus on the total activity over the day. Using your tidied dataset, aggregate across minutes to create a total activity variable for each participant. Plot these total activities (y-axis) against age (x-axis); your plot should compare men to women and have separate panels for each education level. Include a trend line or a smooth to illustrate differences. Comment on your plot.
 
