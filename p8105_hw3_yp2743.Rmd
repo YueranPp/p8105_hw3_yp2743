@@ -196,8 +196,6 @@ q2_df = covar_df |>
   left_join(accel_df, by = "seqn")
 ```
 
-Checked the q2_df merged final dataset should include all originally observed variables but exclude participants less than 21 years of age, and those with missing demographic data; and encode data with reasonable variable classes (i.e. not numeric, and using factors with the ordering of tables and plots in mind).
-
 
 ### Q2. 2 Produce a reader-friendly table for the number of men and women in each education category, and create a visualization of the age distributions for men and women in each education category. 
 
@@ -227,12 +225,33 @@ covar_df |>
 
 228 participants remained after restricting the sample to participants aged 21+ years and excluding those with missing demographic data. There were 27 men and 28 women with less than a high school education, 35 men and 23 women with a high school equivalent education, and 56 men and 59 women with more than a high school education.
 
-Among women, the age distribution for those with more than a high school education peaks around age 25, while the other two education groups have higher densities at older ages, forming two opposite age trends. Among men, the less-than-high-school group peaks around age 70, and has the lowest proportion among age ~ 21-30.  In this sample, younger age seems to have higher educational level, particularly among women.
+Among women, the age distribution for those with more than a high school education peaks around age 25, while the other two education groups have higher densities at older ages, forming two opposite age trends. Among men, the less-than-high-school group peaks around age 70, and has the lowest proportion among age ~ 21-30.  In this sample, higher educational level seems to associate with younger age, especially among women.
 
 
-Traditional analyses of accelerometer data focus on the total activity over the day. Using your tidied dataset, aggregate across minutes to create a total activity variable for each participant. Plot these total activities (y-axis) against age (x-axis); your plot should compare men to women and have separate panels for each education level. Include a trend line or a smooth to illustrate differences. Comment on your plot.
 
-Accelerometer data allows the inspection activity over the course of the day. Make a three-panel plot that shows the 24-hour activity time courses for each education level and use color to indicate sex. Describe in words any patterns or conclusions you can make based on this graph; including smooth trends may help identify differences.
+```{r}
+total_activity_df = q2_df |>
+  group_by(seqn, sex, age, education) |>
+  summarise(
+    total_activity = sum(mims)
+  ) |>
+  ungroup()
+
+total_activity_df |>
+  ggplot(aes(x = age, y = total_activity, color = sex)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(se = FALSE) +
+  facet_grid(. ~ education) +
+  labs(
+    x = "Age (years)",
+    y = "Total daily activity (MIMS)",
+    color = "Sex"
+  )
+```
+
+Among those with less than high school degree, since age of 40, males have higher total daily activity comparing to females. Among those with high school or more than high school degree, females tend to have higher daily activity comparing to males. Comparing across these three categories, people with less than high school degree seem to have highest total daily activity around age 21-40. All educational groups' people, regardless of their gender, have less total daily activity as age increases.
+
+
 
 Problem 3
 Citi Bike is a bike sharing system in New York City; riders can rent pedal-powered or electric bikes from starting stations and return them to another station at their destination. Introduced in 2013, the system is immensely popular and expanded rapidly. Riders who use this system often may become “members” with lower rental rates.
