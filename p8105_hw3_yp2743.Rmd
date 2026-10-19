@@ -416,7 +416,7 @@ median_duration_df |>
   )
 ```
 
-From this plot, I observed that the median ride duration stays consistently highest in 2020 July. Overall, Jan 2020 and July 2020 has higher ride median duration in respective to 2024's same month. Ride duration peaks around the weekend for Jan and July's 2020 and July's 2024, while decreases in Jan 2024.
+Median ride duration is consistently highest in July 2020 across all days of the week. For both January and July, median ride durations are higher in 2020 than in 2024. Weekend rides generally have longer median durations, especially in July 2020. In January 2024, median duration peaks on Saturday and then decreases on Sunday.
 
 
 #### Q3.5 For data in 2024, make a figure that shows the impact of month, membership status, and bike type on the distribution of ride duration. Comment on your results.
@@ -434,6 +434,5 @@ citibike_df |>
   )
 ```
 
-In 2024, we see that member has higher density around 0-25 minutes of ride, while it's lower for casual bikers. For casual rider, electric bike's usage seems to be more concentrated around 0-50 mins comparing to classic bike. However this pattern is not seen on member. Both type of bikes seem to have almost equivalent density.
-
+In 2024,  all distributions are right-skewed, with relatively few long rides. Comparing to casual rider, members’ ride durations are more concentrated at shorter durations. Among casual riders, electric-bike rides have a more prominent peak at short durations (0min-25mins), while classic-bike rides have a broader distribution. Among members, the distributions for the two bike types are similar, although classic-bike rides have a slightly higher peak in July. Compared with January, July generally shows broader distributions with lower peaks.
 
