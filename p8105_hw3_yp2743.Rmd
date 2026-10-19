@@ -278,11 +278,12 @@ daily_activity_df |>
 Comparing across groups, no significant time-daily activity has been found. Three groups all seem to have lowest MIMS activity around 0-7am, then peak 7-10am, stays flat or decreases until 8pm, then decreases 8pm to 12am. However, for both sex, it seems like people with less than high school educational attainment tends to have slightly higher MIMS activity per minute, comparing to the other two groups. 
 
 
-Problem 3
+## Problem 3
 Citi Bike is a bike sharing system in New York City; riders can rent pedal-powered or electric bikes from starting stations and return them to another station at their destination. Introduced in 2013, the system is immensely popular and expanded rapidly. Riders who use this system often may become “members” with lower rental rates.
 
 
-This zip file contains data on rides taken on the NYC Citi Bike system. Files contain 1% of all rides with a total duration less than 4 hours in each of four months. Import, clean, and tidy these data, and describe the resulting dataset.
+This zip file contains data on rides taken on the NYC Citi Bike system. Files contain 1% of all rides with a total duration less than 4 hours in each of four months.
+#### Q3.1 Import, clean, and tidy these data, and describe the resulting dataset.
 
 ```{r load}
 jan_2020_df = read_csv("./citibike/Jan 2020 Citi.csv") |>
@@ -340,7 +341,7 @@ citibike_df |>
 Describe the resulting dataset: This dataset is merged from four different month's NYC Citi biker who ride less than 4 hr each month. Overall, it 99,485 observations (row) and 9 key variables: `id`, `rideablt_type`, `weekdays`, `duration`, `start station name`, `end station name`, `member casual`, `year`, and `month`. `year`, and `month` are added manually to distinguish periods. Except start station (missing 43 records) and end station (missing 207 records), no other variable has missing data. 
 
 
-### Q3.2: Produce a reader-friendly table showing the total number of rides in each combination of year and month separating casual riders and Citi Bike members. Comment on these results.
+#### Q3.2: Produce a reader-friendly table showing the total number of rides in each combination of year and month separating casual riders and Citi Bike members. Comment on these results.
 ```{r totalrides}
 citibike_df |>
   count(year, month, member_casual) |>
@@ -354,8 +355,6 @@ citibike_df |>
       "Year", "Month", "Casual rides (n)", "Member rides (n)"
     )
   )
-
-
 ```
 Among these rides with a total duration less than 4 hours in each of four months:
 In 2020, January, there were 984 casual rides and 11435 member rides.
@@ -364,7 +363,7 @@ In 2024, January, there were 2108 casual rides and 16753 member rides.
 In 2024, July, there were 10894 casual rides and 36262 member rides.
 
 
-###Q3.2 Make a table showing the 5 most popular starting stations for July 2024; include the number of rides originating from these stations.
+#### Q3.3 Make a table showing the 5 most popular starting stations for July 2024; include the number of rides originating from these stations.
 ```{r}
 citibike_df |>
   filter(year == 2024, month == "July") |>
@@ -376,6 +375,7 @@ citibike_df |>
     col.names = c("Starting station", "Number of rides")
   )
 ```
+
 Top 5 starting stations in July, 2024: 
 Pier 61 at Chelsea Piers	(163 rides),
 University Pl & E 14 St	(155 rides),
@@ -384,7 +384,7 @@ West St & Chambers St	(150 rides),
 W 31 St & 7 Ave	(146 rides).
 
 
-### Q3.3 Make a plot to investigate the effects of day of the week, month, and year on median ride duration. This plot can include one or more panels, but should facilitate comparison across all variables of interest. Comment on your observations from this plot.
+#### Q3.4 Make a plot to investigate the effects of day of the week, month, and year on median ride duration. This plot can include one or more panels, but should facilitate comparison across all variables of interest. 
 
 ```{r}
 median_duration_df = citibike_df |>
@@ -393,14 +393,47 @@ median_duration_df = citibike_df |>
     median_duration = median(duration)
   ) |>
   ungroup()
+
+median_duration_df |>
+  ggplot(
+    aes(
+      x = weekdays,
+      y = median_duration,
+      color = month,
+      group = month
+    )
+  ) +
+  geom_point() +
+  geom_line() +
+  facet_grid(. ~ year) +
+  labs(
+    x = "Day of the week",
+    y = "Median ride duration (minutes)",
+    color = "Month"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
 ```
 
-There were relatively few electric Citi Bikes in 2020, but many more are available now. For data in 2024, make a figure that shows the impact of month, membership status, and bike type on the distribution of ride duration. Comment on your results.
+From this plot, I observed that the median ride duration stays consistently highest in 2020 July. Overall, Jan 2020 and July 2020 has higher ride median duration in respective to 2024's same month. Ride duration peaks around the weekend for Jan and July's 2020 and July's 2024, while decreases in Jan 2024.
 
 
+#### Q3.5 For data in 2024, make a figure that shows the impact of month, membership status, and bike type on the distribution of ride duration. Comment on your results.
 
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+citibike_df |>
+  filter(year == 2024) |>
+  ggplot(aes(x = duration, color = rideable_type)) +
+  geom_density() +
+  facet_grid(member_casual ~ month) +
+  labs(
+    x = "Ride duration (minutes)",
+    y = "Density",
+    color = "Bike type"
+  )
 ```
+
+In 2024, we see that member has higher density around 0-25 minutes of ride, while it's lower for casual bikers. For casual rider, electric bike's usage seems to be more concentrated around 0-50 mins comparing to classic bike. However this pattern is not seen on member. Both type of bikes seem to have almost equivalent density.
+
 
