@@ -19,7 +19,7 @@ library(p8105.datasets)
 data("ny_noaa")
 str(ny_noaa)
 
-#check missing var % for precipitation, snow, snow depth, maximum temperature, minimum temperature. Running each of the missing % will result in seven chunks, as we just learned 'everything' code in data wrangling 2, I consulted AI how to write this `mean(is.na(x))` part more efficiently by using `across` + '~'. Double check using '?' function instead of running seven chunks
+#check missing var % for precipitation, snow, snow depth, maximum temperature, minimum temperature. I want to write a simple form to check all missing percentage across column instead of running 7 chunks of `mean(is.na(x))`.
 
 ny_noaa |>
   summarise(
@@ -48,20 +48,67 @@ noaa_df |>
 
 Convert observations for temperature, precipitation, and snowfall to reasonable units: Tmax and Tmin from 10th Celsius to Celsius, precipitation from tenth mm to mm. For snowfall, the most commonly observed value is 0mm. This is expected because the dataset includes observations throughout the year. Plus, snowfall is seasonal, and not many days will have snowfall even during colder months. Additionally, it seems like those mm values are converted from inches, because '25mm, 13mm, 51mm, 76mm converted to inches are 1 inch, 0.5 inch, 2 inch, and 3 inch, this is consistent to the national weather service measurement recommendation.
 
-Make a two-panel plot showing the average max temperature in January and in July in each station across years. Is there any observable / interpretable structure? Any outliers?
+#### Make a two-panel plot showing the average max temperature in January and in July in each station across years. 
 ```{r q1_tmax_in_Jan_n_July, echo = FALSE}
 
 tmax_df = noaa_df |>
   filter(month %in% c(1, 7)) |>
-  group_by(id, month, tmax) |>
+  group_by(id, year, month) |>
   summarise(
-    tmax_avg_month = mean(tmax, na.rm = TRUE)
-  )
+    tmax_avg_month = mean(tmax_c, na.rm = TRUE)
+  )|>
+      ungroup()
+
+#Making plot
+tmax_df |>
+  ggplot(aes(x = year, y = tmax_avg_month, group = id)) +
+  geom_line(alpha = 0.4) + 
+  facet_grid(. ~ month) +
+  labs(
+    title = "Average maximum temperature in January and July",
+    subtitle = "1 = January; 7 = July.",
+    x = "Year",
+    y = "Average daily maximum temperature (°C)"
+  ) +
+  theme_minimal()
+
 ```
+#### Is there any observable / interpretable structure? Any outliers?
+Based on the plot, every year, July's average maximum temperature is much higher (around 20°C higher, estimated roughly by eyes) than January's average maximum temperature. Stations show similar year-to-year fluctuations, but January's variability is greater than July's. There's a notable low temperature of 14°C in July average around year 1987/1988. There's also a low temperature an around -13.5°C in year 1982 in January's plot.
 
+#### Q1 Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); 
 
-Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); and (ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year. 
+```{r i_tmax_vs_tmin }
+temp_plot = noaa_df |>
+  ggplot(aes(x = tmin_c, y = tmax_c)) +
+  geom_bin2d() +
+  labs(
+    x = "Minimum temperature (°C)",
+    y = "Maximum temperature (°C)",
+    fill = "Number of observations"
+  )
 
+temp_plot
+```
+### Q1(ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year. 
+```{r ii_snowfall}
+
+#Making plot
+snow_plot = noaa_df |>
+  filter(snow > 0, snow < 100) |>
+  ggplot(aes(x = factor(year), y = snow)) +
+  geom_boxplot() + 
+  labs(
+    title = "Average snowfall(mm) by year",
+    x = "Year",
+    y = "Snow depth (mm)w"
+  ) 
+
+#merge templot and snowplot
+library(patchwork)
+
+temp_plot + snow_plot
+```
 
 
 ##Problem 2
