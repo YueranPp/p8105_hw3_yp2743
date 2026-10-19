@@ -155,7 +155,21 @@ accel_df |>
 ```
 
 ```{r tidy&merge}
-
+covar_df = covar_df |>
+  filter(age >=21) |>
+  drop_na(sex, age, bmi, education) |>
+  mutate(
+    sex = factor(
+      sex,
+      levels = c(1, 2),
+      labels = c("Male", "Female")
+    ),
+    education = factor(
+      education,
+      levels = c(1, 2, 3),
+      labels = c("Less than high school", "High school equivalent", "More than high school")
+    )
+  )
 ```
 
 Load, tidy, merge, and otherwise organize the data sets. Your final dataset should include all originally observed variables; exclude participants less than 21 years of age, and those with missing demographic data; and encode data with reasonable variable classes (i.e. not numeric, and using factors with the ordering of tables and plots in mind).
