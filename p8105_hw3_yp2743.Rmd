@@ -14,7 +14,7 @@ library(tidyverse)
 ## Problem 1: exploration of NY NOAA dataset
 
 
-```{r q1_loading, echo=FALSE}
+```{r q1_loading}
 library(p8105.datasets)
 data("ny_noaa")
 str(ny_noaa)
@@ -31,7 +31,7 @@ ny_noaa |>
 This dataset contains 2,595,176 observations and 7 key variables: `id`, `date`, precipitation (tenth of mm), snowfall (mm), snow depth (mm), maximum temperature (tenth of Celsius degree), and minimum temperature (tenth of Celsius degree). Each row represents a daily weather observation at a particular station, identifeid by `id`. No `id` or `date` is missing. However, approximately 43.71% of observations are missing maximum or minimum temperature values, which might limit the data available for temperature analyses below. Precipitation data has 5.62% of missing data, snow has 14.69% of missing data, and snow depth has 22.80% of missing data.
 
 
-```{r q1_clean_separate_var, echo = FALSE}
+```{r q1_clean_separate_var}
 noaa_df = ny_noaa |>
 janitor::clean_names() |>
 separate(date, into = c("year", "month","date"), sep = "-") |>
@@ -44,7 +44,6 @@ separate(date, into = c("year", "month","date"), sep = "-") |>
   )
 noaa_df |> 
     count(snow, sort = TRUE)
-
 ```
 
 
@@ -55,7 +54,7 @@ For snowfall, the most commonly observed value is 0mm. This is expected because 
 
 #### Q1.2Make a two-panel plot showing the average max temperature in January and in July in each station across years. 
 
-```{r q1_tmax_in_Jan_n_July, echo = FALSE}
+```{r q1_tmax_in_Jan_n_July}
 
 tmax_df = noaa_df |>
   filter(month %in% c(1, 7)) |>
@@ -88,7 +87,7 @@ Based on the plot, every year, July's average maximum temperature is much higher
 
 #### Q1.3 Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); 
 
-```{r i_tmax_vs_tmin }
+```{r i_tmax_vs_tmin}
 temp_plot = noaa_df |>
   ggplot(aes(x = tmin_c, y = tmax_c)) +
   geom_bin2d() +
@@ -134,29 +133,29 @@ This problem uses accelerometer data collected on 250 participants in the NHANES
 
 
 
-```{r loadin echo = false}
+```{r loading}
 
-covar_df = read_csv(
+covar_raw_df = read_csv(
   "./nhanes_covar.csv",
   skip = 4
 ) |>
   janitor::clean_names()
 
-accel_df = read_csv(
+accel_raw_df = read_csv(
   "./nhanes_accel.csv"
 ) |>
   janitor::clean_names()
 
-head(covar_df)
+head(covar_raw_df)
 
-accel_df |>
+accel_raw_df |>
   select(seqn, min1:min5) |>
   head()
 ```
 
 ```{r tidy&merge}
 #tidy up
-covar_df = covar_df |>
+covar_df = covar_raw_df |>
   filter(age >=21) |>
   drop_na(sex, age, bmi, education) |>
 mutate(
@@ -183,7 +182,7 @@ mutate(
   )
 )
 
-accel_long_df = accel_df |>
+accel_df = accel_raw_df |>
   pivot_longer(
     cols = min1:min1440,
     names_to = "minute",
@@ -194,7 +193,7 @@ accel_long_df = accel_df |>
 
 #merge
 q2_df = covar_df |>
-  left_join(accel_long_df, by = "seqn")
+  left_join(accel_df, by = "seqn")
 ```
 
 Checked the q2_df merged final dataset should include all originally observed variables but exclude participants less than 21 years of age, and those with missing demographic data; and encode data with reasonable variable classes (i.e. not numeric, and using factors with the ordering of tables and plots in mind).
@@ -204,7 +203,7 @@ Checked the q2_df merged final dataset should include all originally observed va
 
 
 ```{r}
-q2_df |>
+covar_df |>
   count(education, sex) |>
   pivot_wider(
     names_from = sex,
@@ -214,7 +213,7 @@ q2_df |>
     col.names = c("Education", "Men", "Women")
   )
 
-q2_df |>
+covar_df |>
   ggplot(aes(x = age, color = education)) +
   geom_density() +
   facet_grid(. ~ sex) +
