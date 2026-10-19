@@ -364,9 +364,36 @@ In 2024, January, there were 2108 casual rides and 16753 member rides.
 In 2024, July, there were 10894 casual rides and 36262 member rides.
 
 
-Make a table showing the 5 most popular starting stations for July 2024; include the number of rides originating from these stations.
+###Q3.2 Make a table showing the 5 most popular starting stations for July 2024; include the number of rides originating from these stations.
+```{r}
+citibike_df |>
+  filter(year == 2024, month == "July") |>
+  drop_na(start_station_name) |>
+  count(start_station_name) |>
+  arrange(desc(n)) |>
+  head(5) |>
+  knitr::kable(
+    col.names = c("Starting station", "Number of rides")
+  )
+```
+Top 5 starting stations in July, 2024: 
+Pier 61 at Chelsea Piers	(163 rides),
+University Pl & E 14 St	(155 rides),
+W 21 St & 6 Ave	1(52 rides),
+West St & Chambers St	(150 rides),
+W 31 St & 7 Ave	(146 rides).
 
-Make a plot to investigate the effects of day of the week, month, and year on median ride duration. This plot can include one or more panels, but should facilitate comparison across all variables of interest. Comment on your observations from this plot.
+
+### Q3.3 Make a plot to investigate the effects of day of the week, month, and year on median ride duration. This plot can include one or more panels, but should facilitate comparison across all variables of interest. Comment on your observations from this plot.
+
+```{r}
+median_duration_df = citibike_df |>
+  group_by(year, month, weekdays) |>
+  summarise(
+    median_duration = median(duration)
+  ) |>
+  ungroup()
+```
 
 There were relatively few electric Citi Bikes in 2020, but many more are available now. For data in 2024, make a figure that shows the impact of month, membership status, and bike type on the distribution of ride duration. Comment on your results.
 
