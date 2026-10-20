@@ -100,7 +100,7 @@ temp_plot = noaa_df |>
 ```
 
 
-### Q1.3(ii, continue) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year. 
+#### Q1.3-(ii, continue) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year. 
 
 
 ```{r ii_snowfall}
@@ -195,7 +195,7 @@ q2_df = covar_df |>
 ```
 
 
-### Q2. 2 Produce a reader-friendly table for the number of men and women in each education category, and create a visualization of the age distributions for men and women in each education category. 
+#### Q2. 2 Produce a reader-friendly table for the number of men and women in each education category, and create a visualization of the age distributions for men and women in each education category. 
 
 
 ```{r}
@@ -253,7 +253,7 @@ total_activity_df |>
 Among those with less than high school degree, since age of 40, males have higher total daily activity comparing to females. Among those with high school or more than high school degree, females tend to have higher daily activity comparing to males. Comparing across these three categories, people with less than high school degree seem to have highest total daily activity around age 21-40. All educational groups' people, regardless of their gender, total daily activity tends to be lower at older ages. A few outliers appear across each educational level group. For example, a data point of male, around 38 y/o in more than high school degree, have daily activity closes to 0.
 
 
-### Q2.3 three-panel plot that shows the 24-hour activity time courses for each education level and use color to indicate sex
+#### Q2.3 three-panel plot that shows the 24-hour activity time courses for each education level and use color to indicate sex
 
 
 ```{r}
